@@ -16,9 +16,9 @@
         <input type="password" name="password" placeholder="password" required class="box"> <br><br>
         <input type="submit" name="submit-btn" value="Login" class="btn">
     </form>
-    <p style="color:red;">
-        <%= request.getAttribute("errorMessage") != null ? request.getAttribute("errorMessage") : "" %>
-    </p>
+   <% if (request.getAttribute("error") != null) { %>
+       <p style="color: red;"><%= request.getAttribute("error") %></p>
+   <% } %>
 </div>
 </body>
 </html>
