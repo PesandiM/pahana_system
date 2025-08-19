@@ -94,6 +94,9 @@ public class BillingService {
 
         updateStock(items);
 
+        CustomerDAO customerDAO = new CustomerDAO();
+        customerDAO.incrementTotalPurchases(customerId);
+
         bill.setBillDate(new java.util.Date());
 
         return bill;

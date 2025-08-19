@@ -358,6 +358,7 @@ public class CustomerDAO {
                     customer.setEmail(rs.getString("email"));
                     customer.setTelephone(rs.getString("telephone"));
                     customer.setAddress(rs.getString("address"));
+                    customer.setTotalPurchases(rs.getInt("total_purchases"));
                     return customer;
                 } else {
                     return null;
@@ -365,4 +366,13 @@ public class CustomerDAO {
             }
         }
     }
+    public void incrementTotalPurchases(int customerId) throws SQLException {
+        String sql = "UPDATE customers SET total_purchases = total_purchases + 1 WHERE customer_id = ?";
+        try (Connection conn = DBConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ps.executeUpdate();
+        }
+    }
+
 }
