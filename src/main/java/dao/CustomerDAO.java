@@ -344,4 +344,25 @@ public class CustomerDAO {
 
         return result;
     }
+
+    public static Customer getCustomerById(int customerId) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE customer_id = ?";
+        try (Connection conn = DBConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer();
+                    customer.setCustomerId(rs.getInt("customer_id"));
+                    customer.setName(rs.getString("name"));
+                    customer.setEmail(rs.getString("email"));
+                    customer.setTelephone(rs.getString("telephone"));
+                    customer.setAddress(rs.getString("address"));
+                    return customer;
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
 }

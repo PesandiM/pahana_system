@@ -12,6 +12,7 @@ public class CustomerService {
         String generatedAccountNo = CustomerDAO.getNextAccountNo();
         customerDTO.setAccountNo(generatedAccountNo);
         Customer customer = CustomerFactory.createCustomer(customerDTO);
+        System.out.println("Generated Account No: " + generatedAccountNo);
         return CustomerDAO.saveCustomer(customer);
     }
 

@@ -22,9 +22,10 @@ public class AddCustomerServlet extends HttpServlet {
         customerDTO.setTelephone(request.getParameter("telephone"));
         boolean success = this.customerService.addCustomer(customerDTO);
         if (success) {
-            response.sendRedirect(request.getContextPath() + "/success.jsp");
+            request.setAttribute("accountNo", customerDTO.getAccountNo());
+            request.getRequestDispatcher("/success.jsp").forward(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + "/error.jsp");
+            request.getRequestDispatcher("/error.jsp").forward(request, response);
         }
 
     }

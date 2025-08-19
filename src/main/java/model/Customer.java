@@ -25,6 +25,11 @@ public class Customer {
     }
 
     public Customer(String accountNo, String name, String email, String address, String telephone) {
+        this.accountNo = accountNo;
+        this.name = name;
+        this.email = email;
+        this.address = address;
+        this.telephone = telephone;
     }
 
     public int getCustomerId() {
