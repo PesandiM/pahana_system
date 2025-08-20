@@ -1,0 +1,20 @@
+.sidebar {
+  width: 250px;
+  background: #2c3e50;
+  color: white;
+}
+.dropdown ul {
+  display: none;
+  padding-left: 15px;
+}
+.dropdown:hover ul {
+  display: block;
+}
+.menu a {
+  color: white;
+  padding: 10px;
+  display: block;
+}
+.menu a:hover {
+  background: #34495e;
+}
