@@ -96,6 +96,7 @@ public class BillingService {
 
         CustomerDAO customerDAO = new CustomerDAO();
         customerDAO.incrementTotalPurchases(customerId);
+        customerDAO.updatePurchaseStats(customerId, totalAmount);
 
         bill.setBillDate(new java.util.Date());
 
@@ -127,5 +128,55 @@ public class BillingService {
     public List<Bill> getAllBillsForDashboard() throws SQLException {
         return billDAO.getAllBillsForDashboard();
     }
+
+//    public void sendInvoiceEmail(int billId) {
+//        Bill bill = billDAO.getBillById(billId);
+//        if (bill == null) return;
+//        Customer customer = customerDAO.getCustomerById(bill.getCustomerId());
+//        if (customer == null || customer.getEmail() == null || customer.getEmail().isEmpty()) return;
+//
+//        List<BillItem> items = billDAO.getBillItems(billId);
+//        StringBuilder content = new StringBuilder();
+//        content.append("<h2>Pahana Bookshop Invoice</h2>")
+//                .append("<p>Invoice #: ").append(billId)
+//                .append("<br>Date: ").append(bill.getBillDate())
+//                .append("<br>Customer: ").append(customer.getName())
+//                .append("<br>Total: $").append(String.format("%.2f", bill.getTotal())).append("</p>")
+//                .append("<table border='1' style='border-collapse: collapse; width: 100%; max-width: 600px;'>")
+//                .append("<tr><th>Item ID</th><th>Name</th><th>Quantity</th><th>Price</th><th>Total</th></tr>");
+//        for (BillItem item : items) {
+//            content.append("<tr>")
+//                    .append("<td>").append(item.getItemId()).append("</td>")
+//                    .append("<td>").append(item.getItemName()).append("</td>")
+//                    .append("<td>").append(item.getQuantity()).append("</td>")
+//                    .append("<td>$").append(String.format("%.2f", item.getItemPrice())).append("</td>")
+//                    .append("<td>$").append(String.format("%.2f", item.getItemTotal())).append("</td>")
+//                    .append("</tr>");
+//        }
+//        content.append("</table>");
+//
+//        Properties props = new Properties();
+//        props.put("mail.smtp.host", "smtp.gmail.com");
+//        props.put("mail.smtp.port", "587");
+//        props.put("mail.smtp.auth", "true");
+//        props.put("mail.smtp.starttls.enable", "true");
+//
+//        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+//            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+//                return new javax.mail.PasswordAuthentication("your-email@gmail.com", "your-app-specific-password");
+//            }
+//        });
+//
+//        try {
+//            MimeMessage message = new MimeMessage(session);
+//            message.setFrom(new InternetAddress("your-email@gmail.com"));
+//            message.addRecipient(Message.RecipientType.TO, new InternetAddress(customer.getEmail()));
+//            message.setSubject("Pahana Bookshop Invoice #" + billId);
+//            message.setContent(content.toString(), "text/html");
+//            Transport.send(message);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

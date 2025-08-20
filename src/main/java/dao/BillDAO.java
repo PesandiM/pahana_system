@@ -1,8 +1,8 @@
 package dao;
 
+import dto.CustomerSummaryDTO;
 import model.Bill;
 import model.BillItem;
-import model.Customer;
 import util.DBConn;
 
 import java.sql.*;
@@ -175,5 +175,31 @@ public class BillDAO {
         }
         return bills;
     }
+    public List<CustomerSummaryDTO> getCustomerPurchases(String accountNo) throws SQLException {
+        List<CustomerSummaryDTO> purchases = new ArrayList<>();
 
+        String sql = "{CALL getCustomerPurchasesByAccount(?)}";
+
+        try (Connection conn = DBConn.getConnection();
+             CallableStatement cs = conn.prepareCall(sql)) {
+
+            cs.setString(1, accountNo);
+
+            try (ResultSet rs = cs.executeQuery()) {
+                while (rs.next()) {
+                    CustomerSummaryDTO dto = new CustomerSummaryDTO();
+                    dto.setBillId(rs.getInt("bill_id"));
+                    dto.setDate(rs.getDate("bill_date"));
+                    dto.setItemName(rs.getString("item_name"));
+                    dto.setItemType(rs.getString("item_type"));
+                    dto.setQuantity(rs.getInt("quantity"));
+                    dto.setPrice(rs.getDouble("item_price"));
+                    dto.setTotal(rs.getDouble("item_total"));
+                    purchases.add(dto);
+                }
+            }
+        }
+
+        return purchases;
+    }
 }
