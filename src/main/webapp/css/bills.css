@@ -125,3 +125,7 @@ table tr:hover {
         padding: 8px 10px;
     }
 }
+
+form .viewpurchasebtn{
+    width: 15%;
+}
