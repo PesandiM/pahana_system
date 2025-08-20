@@ -1,6 +1,7 @@
 package dao;
 
 import dto.CustomerDTO;
+import dto.CustomerPurchaseDTO;
 import model.Customer;
 import util.DBConn;
 
@@ -375,4 +376,49 @@ public class CustomerDAO {
         }
     }
 
+    public void updatePurchaseStats(int customerId, double amount) throws SQLException {
+        String sql = "UPDATE customers " +
+                "SET total_purchases = total_purchases + 1, " +
+                "    total_spent = total_spent + ? " +
+                "WHERE customer_id = ?";
+        try (Connection conn = DBConn.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amount);
+            ps.setInt(2, customerId);
+            ps.executeUpdate();
+        }
+    }
+
+    public List<CustomerPurchaseDTO> getCustomerPurchases(Integer customerId) throws SQLException {
+        List<CustomerPurchaseDTO> purchases = new ArrayList<>();
+        String sql = "SELECT c.customer_id, c.name, b.bill_id, b.bill_date, i.item_name, bi.item_type, " +
+                "bi.quantity, bi.item_price, bi.item_total " +
+                "FROM customers c " +
+                "JOIN bills b ON c.customer_id = b.customer_id " +
+                "JOIN bill_items bi ON b.bill_id = bi.bill_id " +
+                "JOIN items i ON bi.item_id = i.item_id " +
+                (customerId != null ? "WHERE c.customer_id = ? " : "") +
+                "ORDER BY c.customer_id, b.bill_date DESC";
+        try (PreparedStatement pstmt = DBConn.getConnection().prepareStatement(sql)) {
+            if (customerId != null) {
+                pstmt.setInt(1, customerId);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    purchases.add(new CustomerPurchaseDTO(
+                            rs.getInt("customer_id"),
+                            rs.getString("name"),
+                            rs.getInt("bill_id"),
+                            rs.getString("bill_date"),
+                            rs.getString("item_name"),
+                            rs.getString("item_type"),
+                            rs.getInt("quantity"),
+                            rs.getDouble("item_price"),
+                            rs.getDouble("item_total")
+                    ));
+                }
+            }
+        }
+        return purchases;
+    }
 }
