@@ -1,0 +1,58 @@
+body {
+  background: url(../images/bg2.jpeg);
+  align-items: center;
+  height: fit-content;
+  display: flex;
+}
+body h1{
+   color: #fff;
+   font-size: 4.8rem;
+   padding: 4.0rem
+}
+body .header{
+   background: #794434;
+
+}
+.form-container{
+    height: fit-content;
+    width: fit-content;
+    position: relative;
+    align: center;
+    background: #cccac9;
+    border-radius: 1rem;
+    margin-top: 11.5rem;
+}
+.form-container form h1{
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    color: black;
+}
+.form-container form{
+    width: 25rem;
+    margin: 1rem auto;
+    padding: 2rem;
+    border-radius: 5rem;
+    text-align: center;
+}
+.form-container form .box{
+    width: 60%;
+    padding: 0.8rem 0.7rem;
+    font-size: 1rem;
+    border-color: #fff;
+    margin: 1rem 0;
+}
+.form-container form .btn:hover{
+    background-color: #b08d82;
+}
+.form-container form .btn{
+    background-color: #ff4d4d;
+    color: white;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.form-container p{
+    margin-top: 1.8rem;
+    text-align: center;
+}
