@@ -14,6 +14,11 @@ class ItemTest {
             this.quantity = quantity;
             this.category = category;
         }
+
+        @Override
+        public void applyDiscount() {
+
+        }
     }
 
     @Test

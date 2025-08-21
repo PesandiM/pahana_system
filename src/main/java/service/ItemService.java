@@ -66,5 +66,29 @@ public class ItemService {
             throw new IllegalArgumentException("Unknown item type for deletion: " + type);
         }
     }
+
+    public Item getItemById(String type, int id) {
+        if ("book".equalsIgnoreCase(type)) {
+            return bookDAO.getItem(id);
+        } else if ("stationery".equalsIgnoreCase(type)) {
+            return stationeryDAO.getItem(id);
+        }
+        return null;
+    }
+
+    public boolean updateItem(String type, Item item) {
+        try {
+            if ("book".equalsIgnoreCase(type) && item instanceof Book) {
+                bookDAO.updateItem((Book) item);
+                return true;
+            } else if ("stationery".equalsIgnoreCase(type) && item instanceof Stationery) {
+                stationeryDAO.updateItem((Stationery) item);
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 

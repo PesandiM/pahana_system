@@ -4,12 +4,14 @@ import dao.BookDAO;
 import dao.ItemDAO;
 import dao.StationeryDAO;
 import dto.ItemDTO;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Book;
+import model.Item;
 import model.Stationery;
 import service.ItemService;
 import util.DBConn;
@@ -155,13 +157,64 @@ public class ItemServlet extends HttpServlet {
     }
 
     private void showEditForm(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        // Implementation depends on your edit logic (fetch item by id/type and forward to form)
-        // Not detailed here but follows similar pattern
+        String idParam = req.getParameter("id");
+        String type = req.getParameter("type");
+
+        if (idParam == null || type == null) {
+            res.sendRedirect(req.getContextPath() + "/items");
+            return;
+        }
+
+        int itemId = Integer.parseInt(idParam);
+        Item item = service.getItemById(type, itemId);
+
+        if (item == null) {
+            res.sendRedirect(req.getContextPath() + "/items?message=Item not found");
+            return;
+        }
+
+        req.setAttribute("item", item);
+        req.setAttribute("type", type);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("/items/editItem.jsp");
+        dispatcher.forward(req, res);
     }
 
     private void updateItem(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        // Implementation depends on your update logic (process form, update DB, redirect/show)
-        // Not detailed here but follows similar pattern
+        String idParam = req.getParameter("id");
+        String type = req.getParameter("type");
+
+        if (idParam == null || type == null) {
+            res.sendRedirect(req.getContextPath() + "/items");
+            return;
+        }
+
+        int itemId = Integer.parseInt(idParam);
+        String name = req.getParameter("name");
+        double price = Double.parseDouble(req.getParameter("price"));
+        int quantity = Integer.parseInt(req.getParameter("quantity"));
+
+        boolean success = false;
+
+        if ("book".equalsIgnoreCase(type)) {
+            String author = req.getParameter("author");
+            String isbn = req.getParameter("isbn");
+
+            Book book = new Book(itemId, name, price, quantity, author, isbn);
+            success = service.updateItem("book", book);
+
+        } else if ("stationery".equalsIgnoreCase(type)) {
+            String manufacturer = req.getParameter("manufacturer");
+
+            Stationery stationery = new Stationery(itemId, name, price, quantity, manufacturer);
+            success = service.updateItem("stationery", stationery);
+        }
+
+        if (success) {
+            res.sendRedirect(req.getContextPath() + "/items?message=Item updated successfully");
+        } else {
+            req.setAttribute("message", "Failed to update item");
+            showEditForm(req, res); // reload form with values
+        }
     }
 }
 
